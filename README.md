@@ -41,7 +41,7 @@ flowchart TD
 
 ```bash
 # 克隆仓库
-git clone https://github.com/shaotianlu1995/cursor-encoding-safeguard.git
+git clone https://github.com/tinsley623/cursor-encoding-safeguard.git
 cd cursor-encoding-safeguard
 
 # 安装到当前项目
