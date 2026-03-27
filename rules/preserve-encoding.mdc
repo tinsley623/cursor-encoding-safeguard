@@ -1,0 +1,33 @@
+---
+description: 修改已有文件时保留原始编码和换行符
+alwaysApply: true
+---
+
+# Preserve File Encoding
+
+修改已有文件时，必须保留其原始编码和换行符：
+
+1. 修改已有文件只用 StrReplace，不用 Write 覆写
+2. 不要将 GBK/GB2312/GB18030 文件转为 UTF-8，除非用户明确要求
+3. 不要改变文件的换行符风格（CRLF 保持 CRLF，LF 保持 LF）
+4. 若必须用 Write 覆写已有文件，先运行 `encoding_guard.py snapshot`，写后运行 `encoding_guard.py restore`
+
+## StrReplace 会丢失 BOM
+
+Cursor 的 StrReplace 工具在写回文件时会**剥离 UTF-8 BOM**。因此对带 BOM 的文件（本项目所有 `.cpp`/`.h`），每次使用 StrReplace 修改后，必须立即运行以下修复脚本恢复 BOM：
+
+```shell
+python -c "
+bom = b'\xef\xbb\xbf'
+for f in [<填入本次修改的文件完整路径>]:
+    d = open(f,'rb').read()
+    if not d.startswith(bom):
+        open(f,'wb').write(bom + d)
+        print('Restored BOM: ' + f)
+"
+```
+
+**操作流程（每次修改 .cpp/.h 必须遵循）：**
+1. 使用 StrReplace 完成编辑
+2. 立即对所有被修改的文件执行上述 BOM 恢复脚本
+3. 不可省略第 2 步

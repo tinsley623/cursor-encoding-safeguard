@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.pyo
+.encoding-snapshot.json
+.DS_Store
+Thumbs.db
