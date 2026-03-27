@@ -8,6 +8,27 @@ Cursor 的编辑工具（StrReplace / Write）在写回文件时会**剥离 UTF-
 
 本工具集通过 **1 Rule + 2 Skills** 形成闭环防护：
 
+```mermaid
+flowchart TD
+    AI["Cursor AI 编辑文件"]
+
+    AI --> P1["StrReplace — 丢 BOM"]
+    AI --> P2["Write — 丢编码"]
+    AI --> P3["存量编码混乱"]
+
+    P1 --> T1["Rule: preserve-encoding\n自动恢复 BOM\nalwaysApply 自动生效"]
+    P2 --> T2["Skill: preserve-file-encoding\nsnapshot / verify / restore\nWrite 覆写、GBK 保留"]
+    P3 --> T3["Skill: batch-utf8-bom-crlf\n批量统一 UTF-8 BOM + CRLF\n跑一次清干净"]
+
+    style AI fill:#4a90d9,color:#fff
+    style P1 fill:#d94a4a,color:#fff
+    style P2 fill:#d94a4a,color:#fff
+    style P3 fill:#e8a838,color:#fff
+    style T1 fill:#50b86c,color:#fff
+    style T2 fill:#50b86c,color:#fff
+    style T3 fill:#50b86c,color:#fff
+```
+
 | 工具 | 类型 | 做什么 | 何时用 |
 |---|---|---|---|
 | `preserve-encoding` | Rule | 强制 AI 每次编辑 .cpp/.h 后恢复 BOM | 日常防护，`alwaysApply` 自动生效 |
