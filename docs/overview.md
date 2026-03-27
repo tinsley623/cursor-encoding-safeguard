@@ -2,7 +2,7 @@
 
 ## 问题背景
 
-AI 控制不了编辑器底层的二进制行为。Cursor 编辑工具写回文件时会丢失 UTF-8 BOM，AI 无法阻止。WPS C++ 项目要求所有源码 UTF-8 BOM + CRLF，丢 BOM 直接导致 MSVC 编译报错。
+AI 控制不了编辑器底层的二进制行为。Cursor 编辑工具写回文件时会丢失 UTF-8 BOM，AI 无法阻止。C++ 项目要求所有源码 UTF-8 BOM + CRLF，丢 BOM 直接导致 MSVC 编译报错。
 
 加上项目历史积累的编码混乱（GBK、无 BOM UTF-8、LF/CRLF 混杂），需要一套工具体系来保障编码安全。
 
